@@ -1,0 +1,58 @@
+#!/usr/bin/python3
+
+def get_tags(url):
+    if 'awesome-hd' in url:
+        tag = 'AHD'
+    elif 'beyond-hd' in url:
+        tag = 'BHD'
+    elif 'animebytes.tv' in url:
+        tag = 'AnimeBytes'
+    elif 'avistaz' in url:
+        tag = 'Avistaz'
+    elif 'landof.tv' in url:
+        tag = 'BTN'    
+    elif 'bemaniso.ws' in url:
+        tag = 'Bemaniso'    
+    elif 'bibliotik.me' in url:
+        tag = 'Bibliotik'    
+    elif 'gazellegames.net' in url:
+        tag = 'GGN'    
+    elif 'jpopsuki.eu' in url:
+        tag = 'Jpopsuki'    
+    elif 'myanonamouse' in url:
+        tag = 'MAM'    
+    elif 'morethantv' in url:
+        tag = 'MTV'            
+    elif 'opsfet' in url:
+        tag = 'Orpheus'   
+    elif 'passthepopcorn' in url:
+        tag = 'PTP'   
+    elif 'flacsfor.me' in url:
+        tag = 'RED'
+    elif 'totheglory' in url:
+        tag = 'TTG'
+    else:
+        tag = ''
+    return tag;
+
+# Needs to have
+#pip3 install qbittorrent-api
+
+from qbittorrentapi import Client
+client = Client(host='localhost:83')
+
+torrent_list = client.torrents.info()
+numtags = 0
+for torrent in torrent_list:
+    if torrent.tags == '':
+        for x in torrent.trackers:
+            if x.url.startswith('http'):
+                newtag = get_tags(x.url)
+                print('Tag: '+newtag+'|'+torrent.name)
+                torrent.add_tags(tags=(newtag))
+                numtags += 1
+
+if numtags >= 1:
+    print('Updated ',numtags, ' new tags')
+else:
+    print('No new torrents to autotag.')
