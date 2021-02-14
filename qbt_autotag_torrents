@@ -39,7 +39,7 @@ def get_tags(url):
 #pip3 install qbittorrent-api
 
 from qbittorrentapi import Client
-client = Client(host='localhost:8080')
+client = Client(host='localhost:8080', username='user', password='password')
 
 torrent_list = client.torrents.info()
 numtags = 0
